@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven_3_3_3'  // Nom de l'outil Maven configuré dans Jenkins
+        maven 'maven_3_3_3'
+        jdk 'jdk21' // Make sure this matches the name configured in Jenkins
     }
 
     stages {
@@ -14,7 +15,7 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                // Exécuter les tests Maven
+                // Run Maven tests
                 bat 'mvn test'
             }
         }
@@ -22,7 +23,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Vérifier la version de Docker pour s'assurer qu'il est installé
+                    // Check Docker version to ensure it's installed
                     bat 'docker --version'
                     def app = docker.build("username/itsupport:${env.BUILD_NUMBER}")
                 }
