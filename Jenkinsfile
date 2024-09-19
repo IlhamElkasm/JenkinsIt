@@ -10,7 +10,8 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                sh './mvnw test'  // Exécuter les tests unitaires Maven
+                // Utilisez 'bat' pour exécuter les commandes Maven sur Windows
+                bat './mvnw test'
             }
         }
 
@@ -19,7 +20,8 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarQubeScanner'  // Nom de l'outil configuré dans Jenkins
                     withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"  // Exécuter l'analyse SonarQube
+                        // Utilisez 'bat' pour exécuter les commandes SonarQube Scanner sur Windows
+                        bat "${scannerHome}/bin/sonar-scanner.bat"
                     }
                 }
             }
