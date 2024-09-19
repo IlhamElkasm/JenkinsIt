@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        // Assurez-vous que Maven est configuré dans Jenkins
+        // Assurez-vous que Maven est configuré avec le nom exact dans Jenkins
         maven 'Maven 3.3.2'  // Nom de l'outil Maven configuré dans Jenkins
     }
 
