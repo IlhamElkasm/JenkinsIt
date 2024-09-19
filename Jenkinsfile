@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         // Assurez-vous que Maven est configuré dans Jenkins
-        maven 'Maven 3.8.6'  // Nom de l'outil Maven configuré dans Jenkins
+        maven 'Maven 3.3.3'  // Nom de l'outil Maven configuré dans Jenkins
     }
 
     stages {
