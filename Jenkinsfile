@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        // Assurez-vous que Maven est configuré dans Jenkins
+        maven 'Maven 3.8.6'  // Nom de l'outil Maven configuré dans Jenkins
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,27 +15,15 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                // Utilisez 'bat' pour exécuter les commandes Maven sur Windows
-                bat './mvnw test'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'SonarQubeScanner'  // Nom de l'outil configuré dans Jenkins
-                    withSonarQubeEnv('SonarQube') {
-                        // Utilisez 'bat' pour exécuter les commandes SonarQube Scanner sur Windows
-                        bat "${scannerHome}/bin/sonar-scanner.bat"
-                    }
-                }
+                // Exécuter les tests Maven
+                sh 'mvn test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    def app = docker.build("username/itsupport:${env.BUILD_NUMBER}")  // Remplace 'username' par ton identifiant DockerHub
+                    def app = docker.build("username/itsupport:${env.BUILD_NUMBER}")
                 }
             }
         }
@@ -38,8 +31,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {  // Utiliser les identifiants DockerHub configurés dans Jenkins
-                        app.push("${env.BUILD_NUMBER}")  // Pousser l'image avec le numéro de build comme tag
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        app.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -48,7 +41,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Nettoyer l'espace de travail après chaque exécution
+            cleanWs()
         }
     }
 }
